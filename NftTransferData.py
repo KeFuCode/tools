@@ -16,8 +16,8 @@ class NftJsonSpiser:
     def try_requests_api(need_event_type):
         scraper = cloudscraper.create_scraper()
         url = "https://api.opensea.io/api/v1/events"
-        headers = {"Accept": "application/json", "X-API-KEY": "2f6f419a083c46de9d83ce3dbe7db601"}
-        for i in range(1, 100000):
+        headers = {"Accept": "application/json", "X-API-KEY": "9745fb58805643f0a117d4bc043439cf"}
+        for i in range(92080, 100000):
             next_cursor = ""
             download_json = []
             params = {"only_opensea": False, "asset_contract_address": "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258"}
@@ -27,7 +27,7 @@ class NftJsonSpiser:
                 if next_cursor != "":
                     params["cursor"] = next_cursor
                 response = scraper.get(url, params=params, headers=headers, proxies={"https": "http://127.0.0.1:1080"})
-                time.sleep(0.4)
+                time.sleep(0.25)
                 next_cursor = response.json().get("next")
                 for asset_event in response.json().get("asset_events"):
                     download_json.append(asset_event)
@@ -44,7 +44,7 @@ class SaveJsonThread(threading.Thread):
         self.file_content = file_content
 
     def run(self) -> None:
-        with open("./salesdata/{}.json".format(self.flie_num), "w") as f:
+        with open("./transferdata/{}.json".format(self.flie_num), "w") as f:
             f.write(json.dumps(self.file_content, indent=4, separators=(",", ": ")))
         # subprocess.call(["sz", "{}.json".format(self.flie_num)])
         # subprocess.call(["rm", "-f", "{}.json".format(self.flie_num)])
